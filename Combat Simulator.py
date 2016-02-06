@@ -15,6 +15,7 @@ maxehp = 0
 epatk = 0
 epdef = 0
 
+aplayed = False
 willing = True
 exi = False
 combat = False
@@ -52,19 +53,19 @@ def inv(d):
 def presentation(name, hp, level, maxhp, pdef, patk, inv):
     if hp > 0:
         if name == "You":
-            print(str(name)+" are level "+str(level)+", have "+str(hp)+"/"+str(maxhp)+" hp, "+str(patk)+" atk and "+str(pdef)+" def."+" You also have "+str(inv)+ "."+"\n")
+            print(str(name)+" are level "+str(level)+", have "+str(hp)+"/"+str(maxhp)+" hp, "+str(patk)+" atk and"+str(pdef)+" def. You also have "+str(inv)+ "."+"\n")
         else:
-            print(str(name)+" is level "+str(level)+", has "+str(hp)+"/"+str(maxhp)+" hp, "+str(patk)+" atk and "+str(pdef)+" def"+"\n")
+            print(str(name)+" is level "+str(level)+", has "+str(hp)+"/"+str(maxhp)+" hp, "+str(patk)+" atk and"+str(pdef)+" def. he also has " + str(inv) + ".\n")
     else:
         if name == "You":
-            print("You are dead.")
+            print("You are dead.\n")
         else:
-            print(str(name)+" is dead.")
+            print(str(name)+" is dead.\n")
 
 
 def loot(n):
     x = randint(n, 10*n)
-    print("Gained "+str(x)+"gold!")
+    print("Gained "+str(x)+" gold!\n")
     return x
 
 
@@ -72,7 +73,7 @@ def attack(name, patk, pdef, hp):
     if patk > 0:
         health = hp
         health -= int(patk / pdef) + 1
-        print(str(name)+" did "+str(int(patk / pdef) + 1)+" damage!")
+        print(str(name)+" did "+str(int(patk / pdef) + 1)+" damage!\n")
         if health <= 0:
             return 0
         else:
@@ -83,27 +84,35 @@ def attack(name, patk, pdef, hp):
 
 def levelup(exp, maxexp, level):
     if exp >= maxexp:
-        print("Level up! \n you are now level " + str(level + 1) + "!")
+        print("Level up! \n you are now level " + str(level + 1) + "!\n")
         return level + 1
     else:
         return level
 
 
 while willing is True:
-    cont = input("Do you wish to play? <yes/no>\n")
+    if aplayed is False:
+        cont = input("I want to play a game. Do you wish to participate? <yes/no>\n")
+    elif aplayed is true:
+        cont = input("Continue? <yes/no\n")
 
     if cont == "yes":
         combat = True
         hp = maxhp
         print("Your health was restored!\n")
         diff = input("How hard do you want your next match to be? <easy (1) - very hard (10)>\n")
+        aplayed = True
 
         try:
-            if int(diff) >= 1 and int(diff) <= 10:
+            if 1 <= int(diff) <= 10:
                 ehp = 100 * int(diff)
                 maxehp = 100 * int(diff)
-                epatk = randint(8, 12) *int(diff)
+                epatk = randint(8, 12) * int(diff)
                 epdef = int(diff)
+                rand1 = randint(0, int(diff))
+                rand2 = randint(0, int(diff))
+                rand3 = randint(0, int(diff))
+                einv = {"potion": rand1, "shield": rand2, "powder": rand3}
 
             else:
                 print("Level 10, then\n")
@@ -119,7 +128,7 @@ while willing is True:
         while combat is True:
 
             while checkinv is True:
-                presentation("Your adversary", ehp,int(diff), maxehp, epdef, epatk, inventory)
+                presentation("Your adversary", ehp,int(diff), maxehp, epdef, epatk, einv)
                 presentation("You", hp, level, maxhp, pdef, patk, inventory)
                 ans=input("what do you want to do? <use a boost from inventory (1), attack (2), see stats again (3) or visit the market (4)>\n")
 
@@ -135,7 +144,7 @@ while willing is True:
                     elif pot == 3:
                         patk *= 1.5
                     elif pot == 4:
-                        print("Try again")
+                        print("Try again\n")
                     elif pot == 0:
                         print("None left.\n")
 
